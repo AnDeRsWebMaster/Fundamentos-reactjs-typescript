@@ -30,8 +30,8 @@ interface Balance {
 }
 
 const Dashboard: React.FC = () => {
-   const [transactions, setTransactions] = useState<Transaction[]>([]);
-   const [balance, setBalance] = useState<Balance>({} as Balance);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [balance, setBalance] = useState<Balance>({} as Balance);
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
@@ -41,7 +41,9 @@ const Dashboard: React.FC = () => {
         (transaction: Transaction) => ({
           ...transaction,
           formattedValue: formatValue(transaction.value),
-          formattedDate: new Date(transaction.created_at).toLocaleDateString('pt-br')
+          formattedDate: new Date(transaction.created_at).toLocaleDateString(
+            'pt-br',
+          ),
         }),
       );
       const balanceFormatted = {
@@ -96,15 +98,17 @@ const Dashboard: React.FC = () => {
             </thead>
 
             <tbody>
-                {transactions.map(transaction => (
-                  <tr key={transaction.id}>
+              {transactions.map(transaction => (
+                <tr key={transaction.id}>
                   <td className="title">{transaction.title}</td>
-                  <td className="income">{transaction.formattedValue}</td>
+                  <td className={transaction.type}>
+                    {transaction.type === 'outcome' && ' - '}
+                    {transaction.formattedValue}
+                  </td>
                   <td>{transaction.category.title}</td>
-                <td>{transaction.formattedDate}</td>
+                  <td>{transaction.formattedDate}</td>
                 </tr>
-                ))}
-
+              ))}
             </tbody>
           </table>
         </TableContainer>
